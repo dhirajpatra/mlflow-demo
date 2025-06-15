@@ -1,0 +1,14 @@
+artifact_uri: file:///home/dhiraj-patra/Desktop/python/mlflow-demo/mlruns/0/81ed51123a7249faa77a2484bc688c76/artifacts
+end_time: 1749967212467
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 81ed51123a7249faa77a2484bc688c76
+run_name: amusing-crow-303
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749967210911
+status: 3
+tags: []
+user_id: dhiraj-patra

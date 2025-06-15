@@ -1,0 +1,10 @@
+artifact_location: file:///home/dhiraj-patra/Desktop/python/mlflow-demo/mlruns/0/models/m-cbc7e4ca9bf948d5bcea023eea15c0df/artifacts
+creation_timestamp: 1749967579705
+experiment_id: '0'
+last_updated_timestamp: 1749967581223
+model_id: m-cbc7e4ca9bf948d5bcea023eea15c0df
+model_type: null
+name: model
+source_run_id: d9061c45b9354bfa92d74d04bea092aa
+status: 2
+status_message: null
