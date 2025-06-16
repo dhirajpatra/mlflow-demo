@@ -68,7 +68,7 @@ def train():
         print(f"Logged Metrics: Accuracy={accuracy:.4f}, Precision={precision:.4f}, Recall={recall:.4f}, F1-Score={f1:.4f}")
 
         # 5. Model Logging AND Registration
-        print("Logging model to MLflow...")
+        print("\n--- Model Logging and Registration ---")
         signature = infer_signature(X_train, model.predict(X_train))
         input_example = X_train.head(1)
 
@@ -84,33 +84,41 @@ def train():
         print(f"Model also registered as '{REGISTERED_MODEL_NAME}'.")
 
         # 5a. Transition registered model to Production stage
-        # Explicitly fetch the latest version of the registered model using MlflowClient
+        client = MlflowClient()
+        print(f"\n--- Attempting to Transition Model '{REGISTERED_MODEL_NAME}' to 'Production' Stage ---")
         try:
             # Get all versions of the model, sorted by creation timestamp to get the latest
+            # Keeping order_by for now, if it causes issues again with 2.5.0, we'll remove it.
             all_versions = client.search_model_versions(
                 f"name='{REGISTERED_MODEL_NAME}'",
                 order_by=["creation_timestamp DESC"]
             )
+            print(f"DEBUG: Found {len(all_versions)} versions for '{REGISTERED_MODEL_NAME}'.")
+
             if all_versions:
                 latest_version_obj = all_versions[0]
-                registered_model_version = latest_version_obj.version # This `version` attribute is on ModelVersion, not ModelInfo
-                print(f"Found latest version {registered_model_version} (current stage: {latest_version_obj.current_stage}) for registered model {REGISTERED_MODEL_NAME}.")
+                registered_model_version = latest_version_obj.version
+                print(f"DEBUG: Latest registered version is {registered_model_version} (current stage: {latest_version_obj.current_stage}).")
 
                 # Only transition if it's not already in Production
                 if latest_version_obj.current_stage != "Production":
-                    print(f"Transitioning model version {registered_model_version} of {REGISTERED_MODEL_NAME} from '{latest_version_obj.current_stage}' to 'Production' stage.")
+                    print(f"DEBUG: Attempting client.transition_model_version_stage for version {registered_model_version}...")
                     client.transition_model_version_stage(
                         name=REGISTERED_MODEL_NAME,
                         version=registered_model_version,
                         stage="Production"
                     )
-                    print(f"Model version {registered_model_version} of {REGISTERED_MODEL_NAME} successfully transitioned to 'Production' stage.")
+                    print(f"SUCCESS: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} successfully transitioned from '{latest_version_obj.current_stage}' to 'Production' stage.")
                 else:
-                    print(f"Model version {registered_model_version} of {REGISTERED_MODEL_NAME} is already in 'Production' stage. No transition needed.")
+                    print(f"INFO: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} is already in 'Production' stage. No transition needed.")
             else:
-                print(f"Warning: No versions found for registered model '{REGISTERED_MODEL_NAME}'. Cannot transition to Production.")
+                print(f"WARNING: No versions found for registered model '{REGISTERED_MODEL_NAME}'. Cannot transition to Production.")
         except Exception as e:
-            print(f"Error transitioning model to Production stage: {e}")
+            print(f"ERROR: An exception occurred during model stage transition: {e}")
+            import traceback
+            traceback.print_exc() # Print full traceback for deeper insights
+
+        print("--- Model Stage Transition Attempt Complete ---")
 
         # 6. Log additional artifacts
         if hasattr(model, 'feature_importances_'):

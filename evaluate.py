@@ -38,7 +38,7 @@ def evaluate_model(run_id_or_model_uri=None):
         print(f"\nAttempting to load model from: {model_uri}")
     else:
         # Default to loading the latest 'Production' stage model if no specific URI/ID is provided
-        model_uri = "models:/RandomForestIrisClassifier/Production"
+        model_uri = sys.argv[1] if len(sys.argv) > 1 else "models:/RandomForestIrisClassifier@Production" # Use alias syntax
         print(f"\nNo specific RUN_ID or Model URI provided. Attempting to load latest 'Production' model from: {model_uri}")
         # Alternatively, you could try to find the latest run if you don't use registered models often:
         # runs = mlflow.search_runs(order_by=["metrics.accuracy DESC"], max_results=1)
