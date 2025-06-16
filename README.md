@@ -23,10 +23,17 @@ mlflow\_iris/
 ## ⚙️ Setup Instructions
 
 ### 1. Clone the repository
+
 ```bash
 git clone <repo_url>
 cd mlflow_iris
 ````
+
+You can change the branch for more detailed codd.
+
+```bash
+git checkout optimize
+```
 
 ### 2. Install dependencies
 

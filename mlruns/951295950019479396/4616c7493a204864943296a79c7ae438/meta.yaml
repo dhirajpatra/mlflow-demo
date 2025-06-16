@@ -1,0 +1,14 @@
+artifact_uri: file:///media/dhiraj-patra/ubuntu_ext/python/mlflow-demo/mlruns/951295950019479396/4616c7493a204864943296a79c7ae438/artifacts
+end_time: 1750046516066
+entry_point_name: ''
+experiment_id: '951295950019479396'
+lifecycle_stage: active
+run_id: 4616c7493a204864943296a79c7ae438
+run_name: RandomForest_Iris_Classification
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750046514187
+status: 3
+tags: []
+user_id: dhiraj-patra

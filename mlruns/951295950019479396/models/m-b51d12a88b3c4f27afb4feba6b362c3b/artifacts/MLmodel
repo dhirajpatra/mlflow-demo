@@ -1,0 +1,36 @@
+artifact_path: file:///media/dhiraj-patra/ubuntu_ext/python/mlflow-demo/mlruns/951295950019479396/models/m-b51d12a88b3c4f27afb4feba6b362c3b/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 3.1.0
+model_id: m-b51d12a88b3c4f27afb4feba6b362c3b
+model_size_bytes: 160444
+model_uuid: m-b51d12a88b3c4f27afb4feba6b362c3b
+prompts: null
+run_id: 4616c7493a204864943296a79c7ae438
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "sepal length (cm)", "required": true}, {"type":
+    "double", "name": "sepal width (cm)", "required": true}, {"type": "double", "name":
+    "petal length (cm)", "required": true}, {"type": "double", "name": "petal width
+    (cm)", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-06-16 04:01:54.268001'

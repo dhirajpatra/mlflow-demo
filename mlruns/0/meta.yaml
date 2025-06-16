@@ -1,6 +1,6 @@
-artifact_location: file:///home/dhiraj-patra/Desktop/python/mlflow-demo/mlruns/0
-creation_time: 1749967149022
+artifact_location: file:///media/dhiraj-patra/ubuntu_ext/python/mlflow-demo/mlruns/0
+creation_time: 1750046514013
 experiment_id: '0'
-last_update_time: 1749967149022
+last_update_time: 1750046514013
 lifecycle_stage: active
 name: Default
