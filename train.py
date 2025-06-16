@@ -100,17 +100,17 @@ def train():
                 registered_model_version = latest_version_obj.version
                 print(f"DEBUG: Latest registered version is {registered_model_version} (current stage: {latest_version_obj.current_stage}).")
 
-                # Only transition if it's not already in Production
-                if latest_version_obj.current_stage != "Production":
-                    print(f"DEBUG: Attempting client.transition_model_version_stage for version {registered_model_version}...")
-                    client.transition_model_version_stage(
-                        name=REGISTERED_MODEL_NAME,
-                        version=registered_model_version,
-                        stage="Production"
-                    )
-                    print(f"SUCCESS: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} successfully transitioned from '{latest_version_obj.current_stage}' to 'Production' stage.")
-                else:
-                    print(f"INFO: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} is already in 'Production' stage. No transition needed.")
+                # # Only transition if it's not already in Production
+                # if latest_version_obj.current_stage != "Production":
+                #     print(f"DEBUG: Attempting client.transition_model_version_stage for version {registered_model_version}...")
+                #     client.transition_model_version_stage(
+                #         name=REGISTERED_MODEL_NAME,
+                #         version=registered_model_version,
+                #         stage="Production"
+                #     )
+                #     print(f"SUCCESS: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} successfully transitioned from '{latest_version_obj.current_stage}' to 'Production' stage.")
+                # else:
+                #     print(f"INFO: Model version {registered_model_version} of {REGISTERED_MODEL_NAME} is already in 'Production' stage. No transition needed.")
             else:
                 print(f"WARNING: No versions found for registered model '{REGISTERED_MODEL_NAME}'. Cannot transition to Production.")
         except Exception as e:
