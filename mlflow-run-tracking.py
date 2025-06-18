@@ -7,6 +7,24 @@ import mlflow
 import mlflow.sklearn
 import os
 
+# Create a directory to store downloaded files if it doesn't exist
+os.makedirs("data", exist_ok=True)
+
+# Download red-wine-quality.csv
+red_wine_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
+red_wine_file_path = "data/red-wine-quality.csv"
+
+try:
+    red_wine_data = pd.read_csv(red_wine_url, sep=';')
+    red_wine_data.to_csv(red_wine_file_path, index=False)
+    print(f"Downloaded red-wine-quality.csv to {red_wine_file_path}")
+except Exception as e:
+    print(f"Error downloading red-wine-quality.csv: {e}")
+
+# MLflow Program for Iris Dataset
+# Set MLflow tracking URI (optional, can be a local directory or a remote server)
+# mlflow.set_tracking_uri("sqlite:///mlruns.db") # For local database
+
 # Set experiment name
 mlflow.set_experiment("Iris Classification Experiment")
 
@@ -85,13 +103,25 @@ with mlflow.start_run() as run:
 # Print the last active run
 last_run = mlflow.search_runs(order_by=["start_time DESC"], max_results=1)
 if not last_run.empty:
-    print("\n--- Last Active MLflow Run ---")
+    print(last_run)  # This line prints the full DataFrame of the last run
+    print("\n--- Last Active MLflow Run Details ---")
     print(f"Run ID: {last_run.iloc[0].run_id}")
     print(f"Experiment ID: {last_run.iloc[0].experiment_id}")
     print(f"Status: {last_run.iloc[0].status}")
     print(f"Start Time: {last_run.iloc[0].start_time}")
     print(f"End Time: {last_run.iloc[0].end_time}")
-    print(f"Tags: {last_run.iloc[0]['tags']}")
-    print(f"Metrics: {last_run.iloc[0]['metrics']}")
+
+    # Corrected way to print tags and metrics from flattened columns
+    print("Tags:")
+    for col in last_run.columns:
+        if col.startswith('tags.'):
+            tag_name = col[len('tags.'):]
+            print(f"  {tag_name}: {last_run.iloc[0][col]}")
+
+    print("Metrics:")
+    for col in last_run.columns:
+        if col.startswith('metrics.'):
+            metric_name = col[len('metrics.'):]
+            print(f"  {metric_name}: {last_run.iloc[0][col]}")
 else:
     print("\nNo MLflow runs found.")
