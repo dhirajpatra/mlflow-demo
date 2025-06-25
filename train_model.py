@@ -1,13 +1,15 @@
+import mlflow.sklearn
 import pandas as pd
 from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import mlflow
+from mlflow.models import infer_signature
 import mlflow.sklearn
 import logging
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Function to evaluate model metrics
@@ -53,24 +55,61 @@ if __name__ == "__main__":
         logger.info(f"  F1-Score: {f1:.4f}")
 
         # Log parameters and metrics to MLflow
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("max_depth", max_depth)
-        mlflow.log_metric("accuracy", accuracy)
-        mlflow.log_metric("precision", precision)
-        mlflow.log_metric("recall", recall)
-        mlflow.log_metric("f1_score", f1)
+        # mlflow.log_param("n_estimators", n_estimators)
+        # mlflow.log_param("max_depth", max_depth)
+        # mlflow.log_metric("accuracy", accuracy)
+        # mlflow.log_metric("precision", precision)
+        # mlflow.log_metric("recall", recall)
+        # mlflow.log_metric("f1_score", f1)
 
-        # Log the model (Scikit-learn flavor)
-        mlflow.sklearn.log_model(model, "wine_quality_model", registered_model_name="WineQualityModel")
+        # Log metrics
         mlflow.log_metrics({
             "accuracy": accuracy,
             "precision": precision,
             "recall": recall,
             "f1_score": f1
         })
+
+        # Log the model signature
+        signature = infer_signature(X_train, model.predict(X_train))
+        # Log the model, which inherits the parameters and metric
+        model_info = mlflow.sklearn.log_model(
+            sk_model=model,
+            name="wine_quality_model",
+            signature=signature,
+            input_example=X_train,
+            registered_model_name="tracking-quickstart",
+        )
+        # Set a tag that we can use to remind ourselves what this model was for
+        mlflow.set_logged_model_tags(
+            model_info.model_id, {"Training Info": "Basic RM model for wine quality data"}
+        )
+
+        # Set tags for the model
         mlflow.log_params({
             "n_estimators": n_estimators,
             "max_depth": max_depth
         })
         mlflow.set_tag("model_type", "RandomForestClassifier")
         logger.info("Model logged to MLflow Model Registry as 'WineQualityModel'.")
+
+        # inferences
+        load_model = mlflow.pyfunc.load_model(model_info.model_uri)
+        predictions = load_model.predict(X_test[:5])
+        logger.info(f"Inference on first 5 test samples: {predictions}")
+
+        wine_feature_names = wine_data.feature_names
+        logger.info(f"Feature names: {wine_feature_names}")
+
+        result_df = pd.DataFrame({
+            "Actual": y_test[:5],
+            "Predicted": predictions
+        })
+        logger.info("First 5 predictions:")
+        logger.info(result_df)
+
+        result = pd.DataFrame(X_test, columns=wine_feature_names)
+        result['Actual'] = y_test
+        result['Predicted'] = predictions
+        logger.info("result DataFrame:", result.head())
+
