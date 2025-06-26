@@ -95,14 +95,14 @@ if __name__ == "__main__":
 
         # inferences
         load_model = mlflow.pyfunc.load_model(model_info.model_uri)
-        predictions = load_model.predict(X_test[:5])
-        logger.info(f"Inference on first 5 test samples: {predictions}")
+        predictions = load_model.predict(X_test)
+        logger.info(f"Inference on test samples: {predictions}")
 
         wine_feature_names = wine_data.feature_names
         logger.info(f"Feature names: {wine_feature_names}")
 
         result_df = pd.DataFrame({
-            "Actual": y_test[:5],
+            "Actual": y_test,
             "Predicted": predictions
         })
         logger.info("First 5 predictions:")
@@ -111,5 +111,6 @@ if __name__ == "__main__":
         result = pd.DataFrame(X_test, columns=wine_feature_names)
         result['Actual'] = y_test
         result['Predicted'] = predictions
-        logger.info("result DataFrame:", result.head())
+        logger.info(f"result DataFrame:\n{result.head().to_string()}")
+
 
