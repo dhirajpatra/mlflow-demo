@@ -33,6 +33,22 @@ def predict():
         # data = [
         #     [14.34, 1.68, 2.7, 25.0, 98.0, 2.8, 1.31, 0.53, 2.7, 13.0, 0.57, 1.96, 660.0]
         #     ]
+        # input_data = {
+        #     "fixed acidity": 14.34,
+        #     "volatile acidity": 1.68,
+        #     "citric acid": 2.7,
+        #     "residual sugar": 25.0,
+        #     "chlorides": 98.0,
+        #     "free sulfur dioxide": 2.8,
+        #     "total sulfur dioxide": 1.31,
+        #     "density": 0.53,
+        #     "pH": 2.7,
+        #     "sulphates": 13.0,
+        #     "alcohol": 0.57,
+        #     "magnesium": 1.96,
+        #     "ash": 660.0
+        # }
+
 
         # Get the input data from the request
         logger.info(f"Received data for prediction: {data}")
