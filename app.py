@@ -23,6 +23,13 @@ except Exception as e:
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    """
+    {
+        "predictions": [
+            2
+        ]
+    }
+    """
     if model is None:
         return jsonify({"error": "Model not loaded"}), 500
 
